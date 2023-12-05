@@ -20,25 +20,25 @@ def part1(vlines):
     temperature_to_humidity_map=dict()
     humidity_to_location_map=dict()
     for data in seed_to_soil_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         seed_to_soil_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in soil_to_fertilizer_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         soil_to_fertilizer_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in fertilizer_to_water_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         fertilizer_to_water_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in water_to_light_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         water_to_light_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in light_to_temperature_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         light_to_temperature_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in temperature_to_humidity_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         temperature_to_humidity_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in humidity_to_location_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         humidity_to_location_map[range(source,source+numrange)]=range(destination,destination+numrange)
 
     all_sequences=list()
@@ -82,6 +82,12 @@ def part1(vlines):
         all_sequences.append(sequence)
     return min(map(lambda x : x[-1],all_sequences))
 
+def in_range(num,ranges):
+    for r in ranges:
+        if num in r:
+            return True
+    return False
+
 
 def part2(vlines):
     all_seeds= list(map(int,re.findall(r"\d+",vlines[0])))
@@ -103,61 +109,59 @@ def part2(vlines):
     temperature_to_humidity_map=dict()
     humidity_to_location_map=dict()
     for data in seed_to_soil_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         seed_to_soil_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in soil_to_fertilizer_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         soil_to_fertilizer_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in fertilizer_to_water_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         fertilizer_to_water_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in water_to_light_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         water_to_light_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in light_to_temperature_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         light_to_temperature_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in temperature_to_humidity_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         temperature_to_humidity_map[range(source,source+numrange)]=range(destination,destination+numrange)
     for data in humidity_to_location_data.split("\n")[1:]:
-        destination,source,numrange = list(map(int,re.findall(r"\d+",data)))
+        source,destination,numrange = list(map(int,re.findall(r"\d+",data)))
         humidity_to_location_map[range(source,source+numrange)]=range(destination,destination+numrange)
 
-    min_value=10e10
-    for all_seeds in all_ranges:
-        for seed in all_seeds:
-            for source in seed_to_soil_map.keys():
-                if seed in source:
-                    seed=seed_to_soil_map[source][0]+seed-source[0]           
-                    break
-            for source in soil_to_fertilizer_map.keys():
-                if seed in source:
-                    seed=soil_to_fertilizer_map[source][0]+seed-source[0]
-                    break
-            for source in fertilizer_to_water_map.keys():
-                if seed in source:
-                    seed=fertilizer_to_water_map[source][0]+seed-source[0]
-                    break
-            for source in water_to_light_map.keys():
-                if seed in source:
-                    seed=water_to_light_map[source][0]+seed-source[0]
-                    break
-            for source in light_to_temperature_map.keys():
-                if seed in source:
-                    seed=light_to_temperature_map[source][0]+seed-source[0]
-                    break
-            for source in temperature_to_humidity_map.keys():
-                if seed in source:
-                    seed=temperature_to_humidity_map[source][0]+seed-source[0]
-                    break
-            for source in humidity_to_location_map.keys():
-                if seed in source:
-                    seed=humidity_to_location_map[source][0]+seed-source[0]
-                    break
-            if seed < min_value:
-                min_value=seed
-    return min_value
+    for i in range(0,1000000000):
+        seed=i
+        for source in humidity_to_location_map.keys():
+            if seed in source:
+                seed=humidity_to_location_map[source][0]+seed-source[0]
+                break
+        for source in temperature_to_humidity_map.keys():
+            if seed in source:
+                seed=temperature_to_humidity_map[source][0]+seed-source[0]
+                break
+        for source in light_to_temperature_map.keys():
+            if seed in source:
+                seed=light_to_temperature_map[source][0]+seed-source[0]
+                break
+        for source in water_to_light_map.keys():
+            if seed in source:
+                seed=water_to_light_map[source][0]+seed-source[0]
+                break
+        for source in fertilizer_to_water_map.keys():
+            if seed in source:
+                seed=fertilizer_to_water_map[source][0]+seed-source[0]
+                break        
+        for source in soil_to_fertilizer_map.keys():
+            if seed in source:
+                seed=soil_to_fertilizer_map[source][0]+seed-source[0]
+                break
+        for source in seed_to_soil_map.keys():
+            if seed in source:
+                seed=seed_to_soil_map[source][0]+seed-source[0]           
+                break
+        if in_range(seed,all_ranges):
+            return i
 
 print(part1(lines))
 print(part2(lines))
