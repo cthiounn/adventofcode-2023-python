@@ -57,8 +57,20 @@ def get_point_neighbors(current, data):
         neighbors.append(check_east)
     return neighbors
 
+def parity(i,j,data):
+    increment = 1
+    string=""
+    while (i,j-increment) in data :
+        string = data[(i,j-increment)]+string
+        increment += 1
+    counter =(re.sub("(L-*J|F-*7)","||",re.sub("(L-*7|F-*J)","|",string)).count("|"))
+    return counter % 2
 
 def part2(lines):
+    for i in range(len(lines)):
+        for j in range(len(lines[i])):
+           print(lines[i][j], end="")
+        print()
     # parse lines to dict
     data = {(i,j): lines[i][j] for i in range(len(lines)) for j in range(len(lines[i]))}
     starting_point = [(i,j) for i in range(len(lines)) for j in range(len(lines[i])) if lines[i][j] == "S"][0]
@@ -75,39 +87,25 @@ def part2(lines):
                 seen.add(neighbor)
             dict_distance[neighbor] = dict_distance[current] + 1 if neighbor not in dict_distance else min(dict_distance[current] + 1, dict_distance[neighbor])
     
-    new_data = {(i,j): lines[i][j] for i in range(len(lines)) for j in range(len(lines[i])) if (i,j) in seen}
-    for i in range(len(lines)):
-        for j in range(len(lines[i])):
-            if (i,j) not in seen:
-                new_data[(i,j)] = "."
-    
-    # print the maze
-    for i in range(len(lines)):
-        for j in range(len(lines[i])):
-           print(new_data[(i,j)], end="")
-        print()
-    
-    starting_point = (0,0)
-    seen = set()
-    queue = deque()
-    queue.append(starting_point)
-    while queue:
-        current = queue.popleft()
-        new_data[current] = "-"
-        for neighbor in get_point_neighbors(current, new_data):
-            if neighbor not in seen:
-                queue.append(neighbor)
-                seen.add(neighbor)
-    #for i in range(len(lines)):
-    #    for j in range(len(lines[i])):
-    #        new_data[(i,j)] = "|" if new_data[(i,j)] in ("J","L") else new_data[(i,j)]
+    # Specific data input
+    data[starting_point] = "|"
 
-
+    new_data = { (i,j): data[(i,j)] for i in range(len(lines)) for j in range(len(lines[i])) if (i,j) in seen}
     for i in range(len(lines)):
         for j in range(len(lines[i])):
-           print(new_data[(i,j)], end="")
+           if (i,j) not in seen:
+               new_data[(i,j)] = "."
+    
+    for i in range(len(lines)):
+        for j in range(len(lines[i])):
+            
+            if new_data[(i,j)] == "." and  parity(i,j,new_data) == 1:
+                print("@", end="")
+            else:
+                print(new_data[(i,j)], end="")
         print()
-    return sum([1 for i in range(len(lines)) for j in range(len(lines[i])) if new_data[(i,j)] == "." ])
+
+    return sum([1 for i in range(len(lines)) for j in range(len(lines[i])) if new_data[(i,j)] == "." and parity(i,j,new_data) == 1 ])
 
 
 
